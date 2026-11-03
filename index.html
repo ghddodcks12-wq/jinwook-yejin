@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2월 27일 정진욱 ♥ 엄예진 결혼합니다</title>
 <meta name="description" content="2027년 2월 27일 토요일 오후 3시 30분, 아벤티움 서울 3층 단독홀">
-<!-- 카카오톡·문자 미리보기 — 주소가 정해지면 SITE-URL 두 곳을 실제 주소로 바꿔 주세요 -->
+<!-- 카카오톡·문자 미리보기 — 주소가 정해지면 https://ghddodcks12-wq.github.io/jinwook-yejin 두 곳을 실제 주소로 바꿔 주세요 -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="2월 27일 정진욱 ♥ 엄예진 결혼합니다">
 <meta property="og:description" content="2027년 2월 27일 토요일 오후 3시 30분 · 아벤티움 서울 3층 단독홀">
-<meta property="og:image" content="SITE-URL/assets/og.jpg">
-<meta property="og:url" content="SITE-URL/">
+<meta property="og:image" content="https://ghddodcks12-wq.github.io/jinwook-yejin/assets/og.jpg?v=4">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:url" content="https://ghddodcks12-wq.github.io/jinwook-yejin/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;1,400&family=Bona+Nova+SC&family=Mrs+Saint+Delafield&family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
@@ -885,7 +887,7 @@ const whenNear = (el, fn) => { const o = new IntersectionObserver(es => { if (es
   $('#rsMinus').onclick = () => setCount(count - 1); $('#rsPlus').onclick = () => setCount(count + 1);
   const sync = () => { const go = form.attend.value === '참석'; $('#rsCountWrap').hidden = !go; $('#rsMealWrap').hidden = !go; };
   form.addEventListener('change', sync);
-  const showDone = () => { done.hidden = !mine; if (mine) { done.textContent = `${mine.name}님, ${mine.attend === '참석' ? `${mine.count}명 참석으로` : '불참으로'} 전달됐어요. 다시 누르면 수정할 수 있어요.`; $('#openRsvp').textContent = '참석 의사 수정하기'; } };
+  const showDone = () => {};   // 전달 결과는 하단 알림(토스트)으로만 안내
   let checked = false;
   $('#openRsvp').onclick = async () => {
     if (!checked) { checked = true; const s = await getSvc(); db = s.db; me = s.me;
@@ -897,7 +899,7 @@ const whenNear = (el, fn) => { const o = new IntersectionObserver(es => { if (es
     const name = $('#rsName').value.trim(); if (!name) { toast('성함을 적어 주세요'); return $('#rsName').focus(); }
     const attend = form.attend.value, data = { side: form.side.value, attend, name, count: attend === '참석' ? count : 0, meal: attend === '참석' ? form.meal.value : '', msg: $('#rsMsg').value.trim(), ts: Date.now() };
     const btn = $('#rsSave'); btn.disabled = true;
-    try { await db.doc('rsvp/' + me).set(data); mine = data; closeSheet(sheet); toast('참석 의사를 전달했어요'); showDone(); }
+    try { await db.doc('rsvp/' + me).set(data); mine = data; closeSheet(sheet); toast(data.attend === '참석' ? `${data.name}님, ${data.count}명 참석으로 전달했어요` : `${data.name}님, 불참으로 전달했어요`); }
     catch (err) { toast('전달하지 못했어요. 잠시 후 다시 시도해 주세요'); }
     btn.disabled = false; });
 })();
