@@ -224,7 +224,10 @@ body.intro-on{overflow:hidden}
 .tabs button{height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line);font-size:13px;background:var(--paper)}
 .tabs button[aria-selected="true"]{background:var(--moss);color:#fff;border-color:var(--moss)}
 .notice{margin-top:16px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:26px 22px;text-align:center}
-.notice h3{font-size:15px;font-weight:600}
+.notice{padding-top:0;overflow:hidden}
+.notice-img{max-width:none;width:calc(100% + 44px);margin:0 -22px 22px;aspect-ratio:16/10;object-fit:cover;display:block}
+.notice h3{font-size:15px;font-weight:600;padding-top:22px}
+.notice-img:not([hidden])~h3{padding-top:0}
 .notice p{font-size:14px;color:var(--ink-2);line-height:1.85;margin-top:10px;white-space:pre-line}
 
 /* ═════ 계좌 ═════ */
@@ -330,7 +333,7 @@ footer{font-family:var(--en);font-size:10px;letter-spacing:.2em;color:rgba(247,2
 .lb-nav svg{width:20px;height:20px}
 .lb-prev{left:10px}.lb-next{right:10px}
 .mapzoom .lb-stage{overflow:auto;display:block;touch-action:pan-x pan-y pinch-zoom}
-.mapzoom .lb-stage img{max-width:none;max-height:none;width:max(200%,860px);margin:auto}
+.mapzoom .lb-stage img{max-width:none;max-height:none;width:max(180%,760px);margin:auto}
 .toast{position:fixed;left:50%;bottom:86px;z-index:90;transform:translate(-50%,16px);background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:999px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
@@ -401,7 +404,7 @@ footer{font-family:var(--en);font-size:10px;letter-spacing:.2em;color:rgba(247,2
     <p class="addr up" data-f="venue.displayAddress"></p>
     <p class="tel up">Tel. <a id="venueTel"></a></p>
     <button class="map up" type="button" id="openMap" aria-label="약도 크게 보기">
-      <img src="assets/route-map.png" alt="약도: 충정로역 4번 출구에서 청파로를 따라 걸어 횡단보도를 건너면 브라운스톤서울 안 아벤티움 서울" loading="lazy" width="1600" height="1200">
+      <img src="assets/route-map.jpg" alt="약도: 충정로역 4번 출구 또는 서울역 15번 출구에서 청파로를 따라 걸어오면 브라운스톤서울 3층 아벤티움 서울. 서소문역사공원 옆" loading="lazy" width="1200" height="1200">
       <span>약도 크게 보기</span>
     </button>
     <div class="navs up">
@@ -450,7 +453,7 @@ footer{font-family:var(--en);font-size:10px;letter-spacing:.2em;color:rgba(247,2
     <p class="label up">INFORMATION</p>
     <h2 class="title up">예식 정보 및 안내사항</h2>
     <div class="tabs up" role="tablist" id="tabs"></div>
-    <div class="notice up" role="tabpanel" id="notice"><h3></h3><p></p></div>
+    <div class="notice up" role="tabpanel" id="notice"><img class="notice-img" alt="" hidden><h3></h3><p></p></div>
   </section>
 
   <!-- ═════ 계좌 ═════ -->
@@ -560,7 +563,7 @@ footer{font-family:var(--en);font-size:10px;letter-spacing:.2em;color:rgba(247,2
 </div>
 <div class="lb mapzoom" id="mapZoom" role="dialog" aria-modal="true" aria-label="약도 크게 보기">
   <div class="lb-top"><span>약도</span><button type="button" id="mapClose" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-  <div class="lb-stage" id="mapStage"><img src="assets/route-map.png" alt="약도 확대" loading="lazy"></div>
+  <div class="lb-stage" id="mapStage"><img src="assets/route-map.jpg" alt="약도 확대" loading="lazy"></div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -603,14 +606,19 @@ const CONFIG = {
     kakaoUrl: 'https://map.kakao.com/link/search/아벤티움서울'
   },
   ways: [
-    { title: '지하철', items: [{ text: '2·5호선 충정로역 4번 출구 도보 약 3분', sub: '출구 방향으로 70m 직진 후 횡단보도 건너편' }] },
-    { title: '주차', items: [{ text: '본관주차장 · 브라운스톤서울', sub: '청파로 464' }, { text: '별관주차장 · 서소문공원', sub: '칠패로 5' }] }
+    { title: '지하철', items: [
+      { text: '2·5호선 충정로역 4번 출구 도보 약 3분', sub: '출구 방향으로 70m 직진 후 횡단보도 건너편' },
+      { text: '1·4호선 서울역 15번 출구', sub: '서부광장 방향으로 나와 청파로를 따라 직진' }] },
+    { title: '주차', items: [
+      { text: '본관 주차장 · 브라운스톤서울', sub: '최초 120분 무료 · 추가 60분당 5,000원 (최대 30,000원)' },
+      { text: '별관 주차장 · 서소문 성지 역사박물관', sub: '본관 맞은편 — 본관으로 오시면 안내해 드립니다' }] }
   ],
   // 안내사항 — 탭 하나에 제목 + 내용. 내용이 정해지면 바꿔 주세요.
   notices: [
-    { tab: '식사 안내', title: '식사 안내', body: '(식사 장소와 시간을 입력해 주세요)' },
-    { tab: '포토부스', title: '포토부스 이용 안내', body: '(포토부스 운영 여부와 안내 문구를 입력해 주세요)' },
-    { tab: '화환 안내', title: '화환 안내', body: '(화환 관련 안내 문구를 입력해 주세요)' }
+    { tab: '식사 안내', title: '프리미엄 뷔페', img: 'assets/info-food.jpg', alt: '뷔페 음식을 접시에 담는 하객들',
+      body: '아벤티움은 하객 한 분 한 분께 최상의 식사를 제공할 수 있도록 노력하고 있습니다.\n모든 음식은 정성을 다해 최고급 식재료로 엄선하여 준비됩니다.' },
+    { tab: '주차 안내', title: '주차 안내', img: 'assets/info-parking.jpg', alt: '브라운스톤서울 지하 주차장',
+      body: '본관 주차장(브라운스톤서울)과 별관 주차장(서소문 성지 역사박물관)은 서로 마주 보고 있습니다.\n본관 주차장으로 오시면 안내해 드립니다.\n\n최초 120분 무료\n추가 60분당 5,000원 (최대 30,000원)' }
   ],
   closing: { message: '저희의 새로운 시작을<br>함께 축복해 주셔서 감사합니다.', sig: 'JINWOOK & YEJIN' },
   bannerPhoto: 'assets/p1.jpg',
@@ -723,7 +731,7 @@ $('#venueTel').textContent = CONFIG.venue.phone; $('#venueTel').href = 'tel:' + 
 $('#naverMap').href = CONFIG.venue.naverUrl; $('#kakaoMap').href = CONFIG.venue.kakaoUrl;
 $('#copyAddr').onclick = () => copyText(CONFIG.venue.address, '주소를 복사했어요');
 $('#ways').innerHTML = CONFIG.ways.map(w => `<div class="way"><h3>${w.title}</h3><ul>${w.items.map(i => `<li>${i.text}${i.sub ? `<span>${i.sub}</span>` : ''}</li>`).join('')}</ul></div>`).join('');
-$('#openMap').onclick = () => { openSheet($('#mapZoom')); const st = $('#mapStage'); requestAnimationFrame(() => { st.scrollLeft = .36 * st.scrollWidth - st.clientWidth / 2; st.scrollTop = .5 * st.scrollHeight - st.clientHeight / 2; }); };
+$('#openMap').onclick = () => { openSheet($('#mapZoom')); const st = $('#mapStage'); requestAnimationFrame(() => { st.scrollLeft = .4 * st.scrollWidth - st.clientWidth / 2; st.scrollTop = .25 * st.scrollHeight - st.clientHeight / 2; }); };
 $('#mapClose').onclick = () => closeSheet($('#mapZoom'));
 
 /* 갤러리 */
@@ -773,7 +781,8 @@ $('#lbStage').addEventListener('pointerup', e => { if (sx == null) return; const
   const tabs = $('#tabs'), box = $('#notice'), list = CONFIG.notices;
   if (!list.length) { $('#info').remove(); return; }
   tabs.innerHTML = list.map((n, i) => `<button type="button" role="tab" data-t="${i}" aria-selected="${!i}">${n.tab}</button>`).join('');
-  const show = i => { $$('[role=tab]', tabs).forEach((b, j) => b.setAttribute('aria-selected', i === j)); box.querySelector('h3').textContent = list[i].title; box.querySelector('p').textContent = list[i].body; };
+  const show = i => { $$('[role=tab]', tabs).forEach((b, j) => b.setAttribute('aria-selected', i === j)); box.querySelector('h3').textContent = list[i].title; box.querySelector('p').textContent = list[i].body;
+    const im = box.querySelector('.notice-img'); im.hidden = !list[i].img; if (list[i].img) { im.src = list[i].img; im.alt = list[i].alt || ''; } };
   tabs.addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) show(+b.dataset.t); });
   if (list.length < 2) tabs.hidden = true;
   show(0);
